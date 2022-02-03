@@ -28,7 +28,7 @@ def create_timed_spam() -> TimedSpam:
     frequency = int(input('Set frequency in seconds (Leave blank for 1 hour): '))
     send_immediately = (True if input('Do you want to send messages immediately? (Y/N):')
                         in ('y', 'Y', 'Yes', 'yes', 'YES') else False)
-    channels_list = [name.strip() for name in open('venv/channels_list', 'r')]
+    channels_list = [name.strip() for name in open('channels_list', 'r')]
 
     if not frequency:
         frequency = 3600
@@ -43,7 +43,9 @@ if __name__ == '__main__':
     timed_spam = create_timed_spam()
 
     client = TelegramClient('anon', api_id, api_hash).start()
+    print('getting dialogs..')
     client.get_dialogs()
+    print('finished, starting spam')
 
     loop = asyncio.get_event_loop()
     tasks = asyncio.wait([timed_spam.send_spam()])
